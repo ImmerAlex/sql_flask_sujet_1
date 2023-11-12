@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Layout</a>
+        <a href="/employe/show">Employe</a>
+        <a href="/departement/show">Departement</a>
+    </nav>
+
+    <form action="/departement/edit" method="post">
+        <h1>Edit departement</h1>
+        
+        <input type="hidden" value="{{ departement.id }}" name="id">
+
+        <div>
+            <input id="nomDepartement" name="nomDepartement" type="text" value="{{ departement.nomDepartement }}" required>
+            <label for="nomDepartement">Nom departement</label>
+        </div>
+
+        <div class="container-button">
+            <button type="submit">submit</button>
+            <a href="/departement/show">annuler</a>
+        </div>
+    </form>
+
+
+
+    <script src="{{ url_for('static', filename='javaScript/form.js') }}"></script>
+</body>
+
+</html>

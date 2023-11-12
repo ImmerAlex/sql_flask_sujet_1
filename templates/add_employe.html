@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/form.css') }}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Layout</a>
+        <a href="/employe/show">Employe</a>
+        <a href="/departement/show">Departement</a>
+    </nav>
+
+    <form action="/employe/add" method="post">
+        <h1>Add employe</h1>
+        
+        <input type="hidden" value="{{ next_id }}" name="id">
+
+        <div>
+            <input id="nomEmploye" name="nomEmploye" type="text" required>
+            <label for="nomEmploye">Nom employe</label>
+        </div>
+
+        <div>
+            <input id="villeDept" name="villeDept" type="text" required>
+            <label for="villeDept">Ville depart</label>
+        </div>
+
+        <div>
+            <input id="dateEmbauche" name="dateEmbauche" type="date" class="skip has-text" required>
+            <label for="dateEmbauche">Date embauche</label>
+        </div>
+
+        <div>
+            <input id="indice" name="indice" type="number" required>
+            <label for="indice">Indice</label>
+        </div>
+
+        <div>
+            <input id="salaire" name="salaire" type="number" required>
+            <label for="salaire">Salaire</label>
+        </div>
+
+        <div>
+            <input id="photo" name="photo" type="text" required>
+            <label for="photo">Photo</label>
+        </div>
+
+        <div>
+            <select name="departement_id" id="departement_id" required>
+                <option value="">Choisiser un departement</option>
+                {% for elt in departement %}
+                    <option value="{{ elt.id }}">{{ elt.nomDepartement }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="container-button">
+            <button type="submit">submit</button>
+            <a href="/employe/show">annuler</a>
+        </div>
+    </form>
+
+
+
+    <script src="{{ url_for('static', filename='javaScript/form.js') }}"></script>
+</body>
+
+</html>

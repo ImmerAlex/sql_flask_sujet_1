@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_message.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filtre.css') }}">
+    <title>Filtre employe</title>
+</head>
+
+<body>
+    <nav>
+        <a href="/">Layout</a>
+        <a href="/employe/show">Employe</a>
+        <a href="/departement/show">Departement</a>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for categorie, message in messages %}
+                <div role="alert" class="alert {{ categorie }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="post" action="/employe/filtre">
+        <div class="container-filtre">
+            <div class="content-filtre-block">
+                <label class="bold_text" for="nomEmploye">Nom contenant</label>
+                <input type="text" name="nomEmploye" id="nomEmploye">
+            </div>
+
+            <div class="content-filtre-block">
+                <p class="bold_text">Departement</p>
+                {% for dico in departement %}
+                <div>
+                    <input type="checkbox" name="departement" value="{{ dico.id }}" id="{{ dico.id }}{{ dico.nomDepartement }}"></input>
+                    <label for="{{ dico.id }}{{ dico.nomDepartement }}">{{ dico.nomDepartement }}</label>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="content-filtre-block">
+                <p class="bold_text">Salaire</p>
+                <input type="number" placeholder="min" name="salaire_min">
+                <p class="bold_text">et</p>
+                <input type="number" placeholder="max" name="salaire_max">
+            </div>
+        </div>
+
+        <div class="container-button">
+            <button type="submit">Submit</button>
+            <a href="/employe/filtre">Reset</a>
+        </div>
+    </form>
+
+    {% if employe %}
+        <div class="container-cards">
+            {% for dico in employe %}
+                <div class="card">
+                    <img src="../static/images/{{ dico.photo }}" alt="">
+                    <div class="txt-card-container">
+                        <p>Nom : <span>{{ dico.nomEmploye }}</span></p>
+                        <p>Department : <span>{{ dico.nomDepartement }}</span></p>
+                        <p>Embauché : <span>{{ dico.dateEmbauche }}</span></p>
+                        <p>Salaire : <span>{{ dico.salaire }}€</span></p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="nothingFound">Aucun employé trouvé.</p>
+    {% endif %}
+
+
+
+</body>
+</html>

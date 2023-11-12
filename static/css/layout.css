@@ -1,0 +1,40 @@
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 40vh;
+    align-items: center;
+}
+
+h1 {
+    position: relative;
+    font-size: 50px;
+}
+
+h1::before, h1::after {
+    content: "";
+    position: absolute;
+    top: -20px;
+    background-color: red;
+    width: 50px;
+    height: 5px;
+    animation: shake 1s linear infinite;
+}
+
+h1::before {
+    left: 41.5%;
+    transform: rotate(-45deg);
+}
+
+h1::after {
+    right: 41.5%;
+    transform: rotate(45deg);
+}
+
+@keyframes shake {
+    0%, 100% {
+        top: -20px;
+    }
+    50% {
+        top: -40px;
+    }
+}

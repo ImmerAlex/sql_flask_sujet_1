@@ -1,0 +1,29 @@
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 15px 0;
+    border-bottom: 1px solid black;
+}
+
+nav a {
+    position: relative;
+    cursor: pointer;
+}
+
+nav a::before {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    right: 0;
+    width: 0%;
+    height: 2px;
+    background-color: red;
+    transition: 200ms;
+}
+
+nav a:hover:before {
+    left: 0;
+    width: 100%;
+}

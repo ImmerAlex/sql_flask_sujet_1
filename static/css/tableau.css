@@ -1,0 +1,49 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    margin-top: 20px;
+    text-align: center;
+}
+
+table thead {
+    background-color: black;
+    color: white;
+}
+
+thead tr td, tbody tr td {
+    padding: 5px 15px;
+    max-width: 200px;
+}
+
+tbody tr:nth-child(even) {
+    background-color: rgb(165, 165, 165);
+}
+
+tr td a i {
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+tr td img {
+    width: 120px;
+}
+
+tr td span {
+    color: burlywood;
+    letter-spacing: 1px;
+    word-wrap: break-word;
+}
+
+.fa-pen-to-square {
+    background-color: rgb(0, 165, 0);
+    margin-right: 10px;
+}
+
+.fa-trash {
+    background-color: rgb(255, 100, 100);
+}

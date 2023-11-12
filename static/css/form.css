@@ -1,0 +1,74 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+form h1 {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+form div {
+    position: relative;
+}
+
+form div input {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 100%;
+    padding: 5px;
+}
+
+form div input:focus {
+    outline: none;
+}
+
+form div label {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    transition: 200ms;
+}
+
+form div input:focus+label,
+form div input.has-text+label {
+    top: -15px;
+}
+
+.container-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.container-button button, .container-button a {
+    all: unset;
+    text-align: center;
+    font-weight: bold;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.container-button button {
+    background-color: lightgreen;
+}
+
+.container-button a {
+    background-color: lightcoral;
+}

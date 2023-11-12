@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_message.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tableau.css') }}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Layout</a>
+        <a href="/employe/show">Employe</a>
+        <a href="/employe/filtre">Employe filtre</a>
+        <a href="/departement/add">Departement add</a>
+    </nav>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for categorie, message in messages %}
+                <div role="alert" class="alert {{ categorie }}">
+                    <p>{{ message }}</p>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <table>
+
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Nom Departement</td>
+                <td>Bouton utilitaire</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for dico in departement %}
+            <tr>
+                <td>{{ dico.id }}</td>
+                <td>{{ dico.nomDepartement }}</td>
+                <td>
+                    <a href="/departement/edit/{{ dico.id }}"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="/departement/delete/{{ dico.id }}"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+</body>
+
+</html>
