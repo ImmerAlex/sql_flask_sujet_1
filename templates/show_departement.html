@@ -39,6 +39,7 @@
             <tr>
                 <td>Id</td>
                 <td>Nom Departement</td>
+                <td>Employe associer</td>
                 <td>Bouton utilitaire</td>
             </tr>
         </thead>
@@ -48,6 +49,7 @@
             <tr>
                 <td>{{ dico.id }}</td>
                 <td>{{ dico.nomDepartement }}</td>
+                <td>{{ dico.nombre_employes }} employe(s)</td>
                 <td>
                     <a href="/departement/edit/{{ dico.id }}"><i class="fa-solid fa-pen-to-square"></i></a>
                     <a href="/departement/delete/{{ dico.id }}"><i class="fa-solid fa-trash"></i></a>

@@ -34,7 +34,7 @@ INSERT INTO employe(id_employe,nom_employe,ville_dept,date_embauche,indice,salai
     (NULL,'Rousselet', 'Savoyeux', '2010-05-15', 295, 2000 ,'employe3.png', 3),
     (NULL,'Perez', 'Besançon', '2009-02-01', 255, 1500 ,'employe4.png', 1),
     (NULL,'Benatti', 'Pont-de-Planches', '2011-09-06', 285, 1900 ,'employe5.png', 3),
-    (NULL,'Thiebaud', 'Frotey', '2011-09-06', 295, 2000 ,'employe6.png', 1),
+    (NULL,'Thiebaud', 'Frotey', '2011-09-06', 295, 2000,'employe6.png', 1),
     (NULL,'Gauthier', 'Valdoie', '2007-04-02', 285, 1900 ,'employe7.png', 3),
     (NULL,'Lambert', 'Belfort', '2012-03-01', 345, 2200 ,'employe8.png', 2),
     (NULL,'Dupond', 'Besancon', '2011-02-04', 275, 1800 ,'employe9.png', 1),
