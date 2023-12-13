@@ -32,27 +32,27 @@
         <div class="container-filtre">
             <div class="content-filtre-block">
                 <label class="bold_text" for="nomEmploye">Nom contenant</label>
-                <input type="text" name="nomEmploye" id="nomEmploye">
+                <input type="text" name="nomEmploye" id="nomEmploye" value="{% if filtre and filtre['nomEmploye'] %}{{ filtre['nomEmploye'] }}{% endif %}">
             </div>
-
+    
             <div class="content-filtre-block">
                 <p class="bold_text">Departement</p>
                 {% for dico in departement %}
                 <div>
-                    <input type="checkbox" name="departement" value="{{ dico.id }}" id="{{ dico.id }}{{ dico.nomDepartement }}"></input>
+                    <input type="checkbox" name="departement" value="{{ dico.id }}" id="{{ dico.id }}{{ dico.nomDepartement }}" {% if filtre and dico.id in filtre['departement'] %} checked {% endif %}></input>
                     <label for="{{ dico.id }}{{ dico.nomDepartement }}">{{ dico.nomDepartement }}</label>
                 </div>
                 {% endfor %}
             </div>
-
+    
             <div class="content-filtre-block">
                 <p class="bold_text">Salaire</p>
-                <input type="number" placeholder="min" name="salaire_min">
+                <input type="number" placeholder="min" name="salaire_min" value="{% if filtre and filtre['salaire_min'] %}{{ filtre['salaire_min'] }}{% endif %}">
                 <p class="bold_text">et</p>
-                <input type="number" placeholder="max" name="salaire_max">
+                <input type="number" placeholder="max" name="salaire_max" value="{% if filtre and filtre['salaire_max'] %}{{ filtre['salaire_max'] }}{% endif %}">
             </div>
         </div>
-
+    
         <div class="container-button">
             <button type="submit">Submit</button>
             <a href="/employe/filtre">Reset</a>

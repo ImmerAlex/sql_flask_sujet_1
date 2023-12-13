@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, request, flash, g
+import pprint
+from flask import Flask, render_template, redirect, request, flash, session, g
 import pymysql.cursors
 app = Flask(__name__)
 app.secret_key = "azerty123"
@@ -7,10 +8,10 @@ app.secret_key = "azerty123"
 def get_db():
     if 'db' not in g:
         g.db = pymysql.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="flask_sujet_1",
+            host="serveurmysql",
+            user="aimmer",
+            password="1608",
+            database="BDD_aimmer",
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -73,9 +74,9 @@ def delete_departement(id):
     employe_associer = cursor.fetchone()
 
     if employe_associer:
-        message = "Le departement est associer a un employe, il est impossible de le supprimer"
-        flash(message, "error")
-        return redirect("/departement/show")
+        # message = "Le departement est associer a un employe, il est impossible de le supprimer"
+        # flash(message, "error")
+        return redirect(f"/employe/deleteCascade/{id}")
 
     cursor = get_db().cursor()
     sql = ''' DELETE FROM departement WHERE id_departement = %s  '''
@@ -152,11 +153,41 @@ def valid_add_employe():
 
 @app.route("/employe/delete/<id>")
 def delete_employe(id):
+    referre = request.referrer
+    referre = referre.split("/")
+
+    cursor = get_db().cursor()
+    sql = ''' SELECT e.departement_id as id FROM employe e WHERE e.id_employe = %s  '''
+    cursor.execute(sql, (id,))
+    department = cursor.fetchone()
+
     cursor = get_db().cursor()
     sql = ''' DELETE FROM employe WHERE id_employe = %s  '''
     cursor.execute(sql, (id,))
     get_db().commit()
+
+    if 'deleteCascade' in referre:
+        return redirect(f"/employe/deleteCascade/{department.get('id')}")
     return redirect("/employe/show")
+
+
+@app.route("/employe/deleteCascade/<id>")
+def delete_cascade(id):
+    cursor = get_db().cursor()
+    sql = ''' SELECT e.id_employe as id, e.nom_employe as nomEmploye,
+                    e.ville_dept as villeDept, e.date_embauche as dateEmbauche,
+                    e.indice, e.salaire, e.photo, e.departement_id,
+                    d.id_departement as idDepartement, d.nomDepartement
+            FROM employe e
+            JOIN departement d ON e.departement_id = d.id_departement
+            WHERE e.departement_id = %s
+            ORDER BY e.id_employe ASC; '''
+    cursor.execute(sql, (id,))
+    employe_associer = cursor.fetchall()
+
+    if not employe_associer:
+        return redirect(f"/departement/delete/{id}")
+    return render_template("delete_cascade.html", employe=employe_associer, departement=id)
 
 
 @app.route("/employe/edit/<id>", methods=["GET"])
@@ -197,6 +228,10 @@ def valid_edit_employe():
 
 @app.route("/employe/filtre", methods=["GET"])
 def filtre_employe():
+
+    referre = request.referrer
+    referre = referre.split("/")
+
     cursor = get_db().cursor()
     sql = '''
         SELECT e.id_employe as id, e.nom_employe as nomEmploye,
@@ -212,11 +247,21 @@ def filtre_employe():
     cursor.execute(sql)
     departements = cursor.fetchall()
 
+    if "filtre" in referre:
+        session.pop("filtre_session", None)
+
+    if session.get("filtre_session") is not None:
+        temp = session.get("filtre_session")
+        pprint.pprint(temp)
+        return render_template("front_employe_filtre_show.html", employe=session["filtre_session"]["data"]["employe"], departement=session["filtre_session"]["data"]["employe"], filtre=session["filtre_session"]["selected"])
     return render_template("front_employe_filtre_show.html", employe=employes, departement=departements)
 
 
 @app.route("/employe/filtre", methods=["POST"])
 def valid_filtre_employe():
+    if session.get("filtre_session") is not None:
+        session.pop("filtre_session", None)
+
     if request.method == "POST":
         form = request.form
         nom_employe = form.get("nomEmploye")
@@ -251,9 +296,9 @@ def valid_filtre_employe():
         if salaire_max and not salaire_min:
             sql += "AND e.salaire <= %s "
             tup_filtre += (salaire_max,)
-            
+
         if liste_departement:
-            for i in range (len(liste_departement)):
+            for i in range(len(liste_departement)):
                 if i == 0:
                     sql += "AND e.departement_id = %s "
                 else:
@@ -264,13 +309,29 @@ def valid_filtre_employe():
         cursor.execute(sql, tup_filtre)
         employes = cursor.fetchall()
 
-        print(sql, tup_filtre, employes)
-
         sql = ''' SELECT id_departement as id, nomDepartement FROM departement '''
         cursor.execute(sql)
         departements = cursor.fetchall()
 
-    return render_template("front_employe_filtre_show.html", employe=employes, departement=departements)
+        session["filtre_session"] = {
+            "selected": {
+                "nomEmploye": nom_employe if nom_employe else None,
+                "departement": [elt for elt in liste_departement] if liste_departement else [],
+                "salaire_min": int(salaire_min) if salaire_min else None,
+                "salaire_max": int(salaire_max) if salaire_max else None
+            },
+            "data": {
+                "employe": employes,
+                "departement": departements
+            }
+        }
+
+        if session.get("filtre_session") is not None:
+            temp = session.get("filtre_session")
+            pprint.pprint(temp)
+            return render_template("front_employe_filtre_show.html", employe=session["filtre_session"]["data"]["employe"], departement=session["filtre_session"]["data"]["departement"], filtre=session["filtre_session"]["selected"])
+
+        return render_template("front_employe_filtre_show.html", employe=employes, departement=departements)
 
 
 if __name__ == "__main__":

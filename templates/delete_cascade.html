@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tableau.css') }}">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Layout</a>
+        <a href="/employe/show">Employe</a>
+        <a href="/departement/show">Departement</a>
+    </nav>
+
+    <h1 style="margin: 30px 0 10px 0; font-size: 25px;">Supprimer ou modifié ces employes pour pouvoir supprimer le departement voulu</h1>
+
+    <table>
+
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Nom employe</td>
+                <td>Ville depart</td>
+                <td>Date embauche</td>
+                <td>Indice</td>
+                <td>Salaire</td>
+                <td>Photo</td>
+                <td>Departement</td>
+                <td>Bouton utilitaire</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for dico in employe %}
+            <tr>
+                <td>{{ dico.id }}</td>
+                <td>{{ dico.nomEmploye }}</td>
+                <td>{{ dico.villeDept }}</td>
+                <td>{{ dico.dateEmbauche }}</td>
+                <td>{{ dico.indice }}</td>
+                <td>{{ dico.salaire }}</td>
+                <td>
+                    <img src="../static/images/{{ dico.photo }}" alt="pas d'image">
+                </td>
+                <td>{{ dico.departement_id }} <span>({{ dico.nomDepartement }})</span></td>
+                <td>
+                    <a href="/employe/delete/{{ dico.id }}"><i class="fa-solid fa-trash"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+</html>
