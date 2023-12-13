@@ -1,4 +1,3 @@
-import pprint
 from flask import Flask, render_template, redirect, request, flash, session, g
 import pymysql.cursors
 app = Flask(__name__)
@@ -231,6 +230,12 @@ def filtre_employe():
 
     referre = request.referrer
     referre = referre.split("/")
+    
+    if "filtre" in referre:
+        session.pop("filtre_session", None)
+
+    if session.get("filtre_session") is not None:
+        return render_template("front_employe_filtre_show.html", employe=session["filtre_session"]["data"]["employe"], departement=session["filtre_session"]["data"]["departement"], filtre=session["filtre_session"]["selected"])
 
     cursor = get_db().cursor()
     sql = '''
@@ -247,13 +252,6 @@ def filtre_employe():
     cursor.execute(sql)
     departements = cursor.fetchall()
 
-    if "filtre" in referre:
-        session.pop("filtre_session", None)
-
-    if session.get("filtre_session") is not None:
-        temp = session.get("filtre_session")
-        pprint.pprint(temp)
-        return render_template("front_employe_filtre_show.html", employe=session["filtre_session"]["data"]["employe"], departement=session["filtre_session"]["data"]["employe"], filtre=session["filtre_session"]["selected"])
     return render_template("front_employe_filtre_show.html", employe=employes, departement=departements)
 
 
@@ -316,7 +314,7 @@ def valid_filtre_employe():
         session["filtre_session"] = {
             "selected": {
                 "nomEmploye": nom_employe if nom_employe else None,
-                "departement": [elt for elt in liste_departement] if liste_departement else [],
+                "departement": [int(elt) for elt in liste_departement] if liste_departement else [],
                 "salaire_min": int(salaire_min) if salaire_min else None,
                 "salaire_max": int(salaire_max) if salaire_max else None
             },
@@ -327,8 +325,6 @@ def valid_filtre_employe():
         }
 
         if session.get("filtre_session") is not None:
-            temp = session.get("filtre_session")
-            pprint.pprint(temp)
             return render_template("front_employe_filtre_show.html", employe=session["filtre_session"]["data"]["employe"], departement=session["filtre_session"]["data"]["departement"], filtre=session["filtre_session"]["selected"])
 
         return render_template("front_employe_filtre_show.html", employe=employes, departement=departements)
