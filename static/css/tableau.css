@@ -47,3 +47,8 @@ tr td span {
 .fa-trash {
     background-color: rgb(255, 100, 100);
 }
+
+.main-title {
+    margin-top: 20px;
+    font-size: 30px;
+}

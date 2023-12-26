@@ -7,14 +7,27 @@ app.secret_key = "azerty123"
 def get_db():
     if 'db' not in g:
         g.db = pymysql.connect(
-            host="serveurmysql",
-            user="aimmer",
-            password="1608",
-            database="BDD_aimmer",
+            host="localhost",
+            user="root",
+            password="",
+            database="flask_sujet_1",
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
     return g.db
+
+
+# def get_db():
+#     if 'db' not in g:
+#         g.db = pymysql.connect(
+#             host="ImmerAlex.mysql.pythonanywhere-services.com",
+#             user="ImmerAlex",
+#             password="rSQLc9Z!yx9!rau",
+#             database="ImmerAlex$default",
+#             charset='utf8mb4',
+#             cursorclass=pymysql.cursors.DictCursor
+#         )
+#     return g.db
 
 
 @app.teardown_appcontext
@@ -39,7 +52,7 @@ def show_departement():
     sql = ''' SELECT d.id_departement as id, d.nomDepartement, COUNT(e.id_employe) as nombre_employes
             FROM departement d
             LEFT JOIN employe e ON d.id_departement = e.departement_id
-            GROUP BY d.id_departement, d.nomDepartement; '''
+            GROUP BY d.id_departement; '''
     cursor.execute(sql)
     departements = cursor.fetchall()
     return render_template("show_departement.html", departement=departements)
@@ -225,6 +238,14 @@ def valid_edit_employe():
     return redirect("/employe/show")
 
 
+
+
+
+# ------------------------------------------------
+# ------------------- Filtre ---------------------
+# ------------------------------------------------
+
+
 @app.route("/employe/filtre", methods=["GET"])
 def filtre_employe():
 
@@ -328,6 +349,70 @@ def valid_filtre_employe():
             return render_template("front_employe_filtre_show.html", employe=session["filtre_session"]["data"]["employe"], departement=session["filtre_session"]["data"]["departement"], filtre=session["filtre_session"]["selected"])
 
         return render_template("front_employe_filtre_show.html", employe=employes, departement=departements)
+
+
+
+
+# ------------------------------------------------
+# -------------------- Etat ----------------------
+# ------------------------------------------------
+
+
+@app.route("/employe/etat", methods=["GET"])
+def etat_employe():
+    cursor = get_db().cursor()
+    sql = ''' SELECT d.id_departement, d.nomDepartement, IFNULL(ROUND(AVG(e.salaire)), 0) AS SalaireMoyen
+            FROM departement d
+            LEFT JOIN employe e ON d.id_departement = e.departement_id
+            GROUP BY d.id_departement; '''
+    cursor.execute(sql)
+    etat1 = cursor.fetchall()
+    
+    sql = ''' SELECT 
+                d.id_departement, 
+                d.nomDepartement,
+                IFNULL(MIN(e.salaire), 0) AS salaire_minimum,
+                IFNULL(MAX(e.salaire), 0) AS salaire_maximum
+            FROM departement d
+            LEFT JOIN employe e ON d.id_departement = e.departement_id
+            GROUP BY d.id_departement; '''
+    cursor.execute(sql)
+    etat2 = cursor.fetchall()
+    return render_template("front_employe_etat_show.html", etat1=etat1, etat2=etat2)
+
+
+
+
+# ------------------------------------------------
+# --------------- Reset database -----------------
+# ------------------------------------------------
+
+
+@app.route("/reset_database")
+def reset_database():
+    
+    referre = request.referrer
+    referre = referre.split("/")
+
+    cursor = get_db().cursor()
+    
+    with open("./sql_script.sql", "r", encoding="utf-8") as file:
+        sql = file.read().replace("\n", "").split(";")
+    
+    for elt in sql:
+        if elt:
+            cursor.execute(elt)
+            get_db().commit()
+
+    if not referre[3]:
+        return redirect("/")
+    
+    referre = referre[3:]
+    referre = "/".join(referre)
+        
+    return redirect(f"/{referre}")
+
+
 
 
 if __name__ == "__main__":

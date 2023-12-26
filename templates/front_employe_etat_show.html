@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nav.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/flash_message.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tableau.css') }}">
+    <title>Filtre employe</title>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Layout</a>
+        <a href="/employe/show">Employe show</a>
+        <a href="/employe/filtre">Employe filtre</a>
+        <a href="/departement/show">Departement</a>
+        <a href="/reset_database">Reset database</a>
+    </nav>
+
+    <p class="main-title">Moyenne de salaire par département</p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <td>Id department</td>
+                <td>Nom departement</td>
+                <td>Salaire moyen</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for dico in etat1 %}
+            <tr>
+                <td>{{ dico.id_departement }}</td>
+                <td>{{ dico.nomDepartement }}</td>
+                <td>{{ dico.SalaireMoyen }}€</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+    <p class="main-title">Salaire minimum et maximum par departement</p>
+
+    <table>
+
+        <thead>
+            <tr>
+                <td>Id department</td>
+                <td>Nom departement</td>
+                <td>Salaire minimum</td>
+                <td>Salaire maximum</td>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for dico in etat2 %}
+            <tr>
+                <td>{{ dico.id_departement }}</td>
+                <td>{{ dico.nomDepartement }}</td>
+                <td>{{ dico.salaire_minimum }}€</td>
+                <td>{{ dico.salaire_maximum }}€</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+
+</html>

@@ -1,5 +1,5 @@
-DROP TABLE IF EXISTS departement;
 DROP TABLE IF EXISTS employe;
+DROP TABLE IF EXISTS departement;
 
 CREATE TABLE departement (
     id_departement INT AUTO_INCREMENT,
@@ -41,3 +41,4 @@ INSERT INTO employe(id_employe,nom_employe,ville_dept,date_embauche,indice,salai
     (NULL,'Durand', 'Vesoul', '2011-02-04', 205, 1200 ,'no_photo.jpg', 1),
     (NULL,'Lapierre', 'Valdoie', '2012-07-25', 295, 2000 ,'employe10.png', 1),
     (NULL,'Philippe', 'Belfort', '2011-03-21', 345, 2200 ,'employe11.png', 2);
+

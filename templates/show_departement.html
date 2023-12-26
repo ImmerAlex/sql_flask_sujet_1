@@ -20,18 +20,11 @@
         <a href="/">Layout</a>
         <a href="/employe/show">Employe</a>
         <a href="/employe/filtre">Employe filtre</a>
-        <a href="/departement/add">Departement add</a>
+        <a href="/employe/etat">Etat</a>
+        <a href="/reset_database">Reset database</a>
     </nav>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for categorie, message in messages %}
-                <div role="alert" class="alert {{ categorie }}">
-                    <p>{{ message }}</p>
-                </div>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
+    <a class="main-title" href="/departement/add">Departement add</a>
 
     <table>
 
